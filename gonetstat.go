@@ -203,7 +203,7 @@ func removeEmpty(array []string) []string {
 }
 
 
-func netstat(opt Options) []Process {
+func Netstat(opt Options) []Process {
     // Return a array of Process with Name, Ip, Port, State .. etc
     // Require Root acess to get information about some processes.
 
@@ -250,27 +250,27 @@ func netstat(opt Options) []Process {
 
 func Tcp() []Process {
     // Get a slice of Process type with TCP data
-    data := netstat(Options{ExtendedInfo: true, PidInfo: true, Protocol: "tcp"})
+    data := Netstat(Options{ExtendedInfo: true, PidInfo: true, Protocol: "tcp"})
     return data
 }
 
 
 func Udp() []Process {
     // Get a slice of Process type with UDP data
-    data := netstat(Options{ExtendedInfo: true, PidInfo: true, Protocol: "udp"})
+    data := Netstat(Options{ExtendedInfo: true, PidInfo: true, Protocol: "udp"})
     return data
 }
 
 
 func Tcp6() []Process {
     // Get a slice of Process type with TCP6 data
-    data := netstat(Options{ExtendedInfo: true, PidInfo: true, Protocol: "tcp6"})
+    data := Netstat(Options{ExtendedInfo: true, PidInfo: true, Protocol: "tcp6"})
     return data
 }
 
 
 func Udp6() []Process {
     // Get a slice of Process type with UDP6 data
-    data := netstat(Options{ExtendedInfo: true, PidInfo: true, Protocol: "udp6"})
+    data := Netstat(Options{ExtendedInfo: true, PidInfo: true, Protocol: "udp6"})
     return data
 }
