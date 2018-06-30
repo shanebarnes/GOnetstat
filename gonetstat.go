@@ -42,6 +42,11 @@ var STATE = map[string]string {
                             "0B": "CLOSING",
 }
 
+type Options struct {
+    ExtendedInfo bool
+    PidInfo      bool
+    Protocol     string
+}
 
 type Process struct {
     User         string
@@ -198,13 +203,13 @@ func removeEmpty(array []string) []string {
 }
 
 
-func netstat(t string) []Process {
+func netstat(opt Options) []Process {
     // Return a array of Process with Name, Ip, Port, State .. etc
     // Require Root acess to get information about some processes.
 
     var Processes []Process
 
-    data := getData(t)
+    data := getData(opt.Protocol)
 
     for _, line := range(data) {
 
@@ -220,10 +225,18 @@ func netstat(t string) []Process {
         fport := hexToDec(fip_port[1])
 
         state := STATE[line_array[3]]
-        uid := getUser(line_array[7])
-        pid := findPid(line_array[9])
-        exe := getProcessExe(pid)
-        name := getProcessName(exe)
+
+        var uid string
+        if opt.ExtendedInfo {
+            uid = getUser(line_array[7])
+        }
+
+        var exe, name, pid string
+        if opt.PidInfo {
+            pid = findPid(line_array[9])
+            exe = getProcessExe(pid)
+            name = getProcessName(exe)
+        }
 
         p := Process{uid, name, pid, exe, state, ip, port, fip, fport}
 
@@ -237,27 +250,27 @@ func netstat(t string) []Process {
 
 func Tcp() []Process {
     // Get a slice of Process type with TCP data
-    data := netstat("tcp")
+    data := netstat(Options{ExtendedInfo: true, PidInfo: true, Protocol: "tcp"})
     return data
 }
 
 
 func Udp() []Process {
     // Get a slice of Process type with UDP data
-    data := netstat("udp")
+    data := netstat(Options{ExtendedInfo: true, PidInfo: true, Protocol: "udp"})
     return data
 }
 
 
 func Tcp6() []Process {
     // Get a slice of Process type with TCP6 data
-    data := netstat("tcp6")
+    data := netstat(Options{ExtendedInfo: true, PidInfo: true, Protocol: "tcp6"})
     return data
 }
 
 
 func Udp6() []Process {
     // Get a slice of Process type with UDP6 data
-    data := netstat("udp6")
+    data := netstat(Options{ExtendedInfo: true, PidInfo: true, Protocol: "udp6"})
     return data
 }
